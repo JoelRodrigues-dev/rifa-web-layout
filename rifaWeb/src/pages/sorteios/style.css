@@ -21,6 +21,7 @@ header {
   height: 70px;
   background-color: #1e1e1e;
   position: fixed;
+  z-index: 90;
 }
 
 .header-title {
