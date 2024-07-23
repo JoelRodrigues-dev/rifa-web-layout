@@ -328,6 +328,7 @@ footer {
   align-items: center;
   justify-content: center;
   margin-top: 26px;
+  cursor: pointer;
 }
 
 .draw-total-price {
@@ -371,11 +372,16 @@ footer {
   border-radius: 50%;
   padding: 5px;
   border: none;
+  cursor: pointer;
 }
 
-.draw-quotas-amount p {
-  position: relative;
+.draw-quotas-amount input {
+  width: 60px;
   right: 30px;
+  border-style: none;
+  padding: 2px;
+  border-radius: 5px;
+  background-color: none;
 }
 
 .btn-purchase {
@@ -389,4 +395,5 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }

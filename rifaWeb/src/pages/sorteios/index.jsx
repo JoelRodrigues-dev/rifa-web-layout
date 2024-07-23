@@ -1,29 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 import rectangle from "../../assets/imgs/rectangle.png";
 import iphoneDoze from "../../assets/imgs/iphoneDoze.png";
 import kitGamer from "../../assets/imgs/kitGamer.png";
+import Header from "../../assets/components/header/Header";
+import LoginModal from "../../assets/components/loginUser/LoginUser";
 
 function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [quotas, setQuotas] = useState(0); // Inicializa com 30 cotas
+  const [total, setTotal] = useState(0);
+
+  // Valores fixos de cotas
+  const quotasValues = [100, 600, 1000, 1500];
+
+  // Atualiza o total baseado no número de cotas
+  const updateTotal = (newQuotas) => {
+    const pricePerQuota = 0.08; // Defina o preço por cota
+    setTotal(newQuotas * pricePerQuota);
+  };
+
+  const handleIncrement = () => {
+    const newQuotas = quotas + 1;
+    setQuotas(newQuotas);
+    updateTotal(newQuotas);
+  };
+
+  const handleDecrement = () => {
+    const newQuotas = quotas > 0 ? quotas - 1 : 0;
+    setQuotas(newQuotas);
+    updateTotal(newQuotas);
+  };
+
+  const handleAddQuotas = (value) => {
+    const newQuotas = quotas + value;
+    setQuotas(newQuotas);
+    updateTotal(newQuotas);
+  };
+
+  const handleInputChange = (event) => {
+    const newQuotas = parseInt(event.target.value, 10);
+    if (!isNaN(newQuotas) && newQuotas >= 0) {
+      setQuotas(newQuotas);
+      updateTotal(newQuotas);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="container">
       <div>
-        <header>
-          <div className="header-title">
-            <h1>Hello World!</h1>
-          </div>
-          <nav className="links-header">
-            <a href="">Sorteios</a>
-            <a href="">Sorteios ao vivo</a>
-            <a href="">Sobre nós</a>
-            <a href="">Resultados</a>
-          </nav>
-          <div>
-            <button type="button" className="btn-ticket">
-              Meus Titulos
-            </button>
-          </div>
-        </header>
+        <Header onButtonClick={handleOpenModal} />
+        {showModal && (
+          <LoginModal showModal={showModal} onClose={handleCloseModal} />
+        )}
         <main>
           <section className="feature-draws">
             <h2>Sorteios em destaques</h2>
@@ -43,17 +80,27 @@ function Home() {
                 <p>Valor: R$0,00</p>
                 <p>Data do sorteio: 00/00/0000</p>
                 <div className="draw-quotas">
-                  <div className="draw-quotas-block">+100</div>
-                  <div className="draw-quotas-block">+600</div>
-                  <div className="draw-quotas-block">+1000</div>
-                  <div className="draw-quotas-block">+1500</div>
+                  {quotasValues.map((value, index) => (
+                    <div
+                      key={index}
+                      className="draw-quotas-block"
+                      onClick={() => handleAddQuotas(value)}
+                    >
+                      +{value}
+                    </div>
+                  ))}
                 </div>
                 <div className="draw-total-price">
-                  <p>Total: R$0,00</p>
+                  <p>Total: R${total.toFixed(2)}</p>
                   <div className="draw-quotas-amount">
-                    <button>+</button>
-                    <p>30</p>
-                    <button>+</button>
+                    <button onClick={handleDecrement}>-</button>
+                    <input
+                      type="number"
+                      value={quotas}
+                      onChange={handleInputChange}
+                      min="0"
+                    />
+                    <button onClick={handleIncrement}>+</button>
                   </div>
                 </div>
                 <div className="btn-purchase">
